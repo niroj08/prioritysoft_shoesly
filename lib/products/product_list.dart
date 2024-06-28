@@ -47,7 +47,7 @@ class ProductListPage extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 20.0),
                             value: controller.tag.value,
                             onChanged: (val) {
-                              controller.tag.value = val;
+                             controller.onChangedBrandSelection(val);
                             },
                             choiceItems: C2Choice.listFrom<int, String>(
                               source: controller.brandValue,
@@ -77,7 +77,7 @@ class ProductListPage extends StatelessWidget {
                               shrinkWrap: true,
                               // Create a grid with 2 columns. If you change the scrollDirection to
                               // horizontal, this produces 2 rows.
-                              itemCount: 10,
+                              itemCount: controller.products.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,21 +98,23 @@ class ProductListPage extends StatelessWidget {
                                               height: 20.0,
                                               width: 20.0,
                                               child: Image.asset(
-                                                'assets/brands/Name=Adidas, Color=Grey.png',
+                                                controller.getBrandImage(index),
                                               ),
                                             ),
                                           ),
                                           Align(
                                             alignment: Alignment.center,
                                             child: Image.asset(
-                                                'assets/product_images/Dummy=1, Brand=Nike, Size=Normal.png'),
+                                                controller.getProductImage(index)),
                                           ),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 10.0),
                                     Text(
-                                      'Title',
+                                      controller.products[index].title!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: ShoeslyTextTheme.bodyText100,
                                     ),
                                     const SizedBox(height: 4.0),
@@ -127,14 +129,14 @@ class ProductListPage extends StatelessWidget {
                                           width: 2.0,
                                         ),
                                         Text(
-                                          '4.5',
+                                          "${controller.products[index].rating!}",
                                           style: ShoeslyTextTheme.headline300,
                                         ),
                                         const SizedBox(
                                           width: 2.0,
                                         ),
                                         Text(
-                                          '(1045 Reviews)',
+                                          "(${controller.products[index].reviews!} reviews)",
                                           style: ShoeslyTextTheme.bodyText100
                                               .copyWith(color: Colors.grey),
                                         ),
@@ -142,7 +144,7 @@ class ProductListPage extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 4.0),
                                     Text(
-                                      '235.00',
+                                      "\$${controller.products[index].price!}",
                                       style: ShoeslyTextTheme.headline300,
                                     ),
                                   ],

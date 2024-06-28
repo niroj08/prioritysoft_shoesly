@@ -4,7 +4,7 @@ class ProductItem {
   String? brand;
   double? price;
   double? rating;
-  double? reviews;
+  int? reviews;
 
   ProductItem({
     this.id,

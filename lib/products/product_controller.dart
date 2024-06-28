@@ -18,11 +18,12 @@ class ProductController extends GetxController {
   FirestoreDatabaseServie databaseServie = FirestoreDatabaseServie();
 
   RxInt tag = 0.obs;
-  RxList<String> brandValue = ["All"].obs;
+  List<String> brandValue = ["All"];
   QueryDocumentSnapshot<Map<String, dynamic>>? brandsDocument;
   QueryDocumentSnapshot<Map<String, dynamic>>? prodcutsDocument;
 
-  List<ProductItem> products = [];
+  RxList<ProductItem> products = <ProductItem>[].obs;
+  List<ProductItem> allProducts = [];
 
   @override
   void onInit() {
@@ -82,10 +83,30 @@ class ProductController extends GetxController {
 
   setProducts() {
     getProductsFromDb();
-    dynamic products = prodcutsDocument!.data().values;
+    dynamic productsVal = prodcutsDocument!.data().values;
 
-    for (var product in products.first) {
+    for (var product in productsVal.first) {
+      allProducts.add(ProductItem.fromJson(product));
       products.add(ProductItem.fromJson(product));
+    }
+  }
+
+  String getBrandImage(int index) {
+    return 'assets/brands/Name=${products[index].brand!}, Color=Grey.png';
+  }
+
+  String getProductImage(int index) {
+    return 'assets/product_images/Brand=${products[index].brand!}.png';
+  }
+
+  void onChangedBrandSelection(int val) {
+    tag.value = val;
+    products.clear();
+    if (brandValue[val] == "All") {
+      products.addAll(allProducts);
+    } else {
+      products.addAll(allProducts
+          .where((element) => element.brand!.toLowerCase() == brandValue[val].toLowerCase()));
     }
   }
 }

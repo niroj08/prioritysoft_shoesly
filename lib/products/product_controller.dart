@@ -65,7 +65,6 @@ class ProductController extends GetxController {
     print('Connectivity changed: $_connectionStatus');
   }
 
-
   getBrandsFromDb() {
     brandsDocument = databaseServie.getBrands();
   }
@@ -74,6 +73,7 @@ class ProductController extends GetxController {
     prodcutsDocument = databaseServie.getProducts();
   }
 
+//prepare the list of string for the brand name which will be used in view to show in top filter section
   setBrandsNames() {
     getBrandsFromDb();
     dynamic brands = brandsDocument!.data().values;
@@ -83,6 +83,7 @@ class ProductController extends GetxController {
     }
   }
 
+//prepare the list of products from the documents retrieved from firestore database
   setProducts() {
     getProductsFromDb();
     dynamic productsVal = prodcutsDocument!.data().values;
@@ -93,14 +94,17 @@ class ProductController extends GetxController {
     }
   }
 
+//images are stored locally and pass the brand name as argument to get the logo of the brand
   String getBrandImage(String brand) {
     return 'assets/brands/Name=$brand, Color=Grey.png';
   }
 
+//images are store locally and pass the brand name as argument to get the image of the product
   String getProductImage(String brand) {
     return 'assets/product_images/Brand=$brand.png';
   }
 
+//update the product list as per the user selection of the brand
   void onChangedBrandSelection(int val) {
     tag.value = val;
     products.clear();

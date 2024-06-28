@@ -1,10 +1,7 @@
-import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:prioritysoft_shoesly/products/product_controller.dart';
 import 'package:prioritysoft_shoesly/repository/model/product.dart';
-import 'package:prioritysoft_shoesly/utils/constants.dart';
 import 'package:prioritysoft_shoesly/utils/styles.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

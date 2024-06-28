@@ -103,7 +103,9 @@ class ProductListPage extends StatelessWidget {
                         ],
                       ),
               )
-            : Lottie.asset('assets/no_internet.json', height: 300.00),
+            : Center(
+                child: Lottie.asset('assets/animations/no_internet.json',
+                    height: 300.00)),
       ),
       floatingActionButton: Obx(() => Visibility(
             visible: controller.hasInternet.value &&

@@ -46,11 +46,12 @@ class ProductController extends GetxController {
     }
   }
 
+//update the change in the internet connectivity and if there seems to be any change do the needed
   Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
     _connectionStatus = result;
     hasInternet.value = !result.contains(ConnectivityResult.none);
 
-    if (hasInternet.value) {
+    if (hasInternet.value && databaseServie.collection == null) {
       databaseServie.getCollectionData().then((onValue) {
         if (onValue) {
           isCollecitonLoading.value = !onValue;
@@ -63,6 +64,7 @@ class ProductController extends GetxController {
     // ignore: avoid_print
     print('Connectivity changed: $_connectionStatus');
   }
+
 
   getBrandsFromDb() {
     brandsDocument = databaseServie.getBrands();

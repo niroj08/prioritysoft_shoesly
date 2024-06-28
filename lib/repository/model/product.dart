@@ -1,4 +1,4 @@
-class NewsArticle {
+class ProductItem {
   int? id;
   String? title;
   String? brand;
@@ -6,7 +6,7 @@ class NewsArticle {
   double? rating;
   double? reviews;
 
-  NewsArticle({
+  ProductItem({
     this.id,
     this.title,
     this.brand,
@@ -15,7 +15,7 @@ class NewsArticle {
     this.reviews,
   });
 
-  NewsArticle.fromJson(Map<String, dynamic> json) {
+  ProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     brand = json['brand'];

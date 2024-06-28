@@ -3,10 +3,10 @@ import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:prioritysoft_shoesly/repository/firestore_database.dart';
+import 'package:prioritysoft_shoesly/repository/model/product.dart';
 
 class ProductController extends GetxController {
   RxBool hasInternet = false.obs;
@@ -18,9 +18,11 @@ class ProductController extends GetxController {
   FirestoreDatabaseServie databaseServie = FirestoreDatabaseServie();
 
   RxInt tag = 0.obs;
-
   RxList<String> brandValue = ["All"].obs;
   QueryDocumentSnapshot<Map<String, dynamic>>? brandsDocument;
+  QueryDocumentSnapshot<Map<String, dynamic>>? prodcutsDocument;
+
+  List<ProductItem> products = [];
 
   @override
   void onInit() {
@@ -52,6 +54,7 @@ class ProductController extends GetxController {
         if (onValue) {
           isCollecitonLoading.value = !onValue;
           setBrandsNames();
+          setProducts();
         }
       });
     }
@@ -60,17 +63,29 @@ class ProductController extends GetxController {
     print('Connectivity changed: $_connectionStatus');
   }
 
-  getBrands() {
+  getBrandsFromDb() {
     brandsDocument = databaseServie.getBrands();
   }
 
+  getProductsFromDb() {
+    prodcutsDocument = databaseServie.getProducts();
+  }
+
   setBrandsNames() {
-    getBrands();
-   dynamic brands = brandsDocument!.data().values;
+    getBrandsFromDb();
+    dynamic brands = brandsDocument!.data().values;
 
     for (var brand in brands.first) {
       brandValue.add(brand['name']);
     }
-    return brandValue;
+  }
+
+  setProducts() {
+    getProductsFromDb();
+    dynamic products = prodcutsDocument!.data().values;
+
+    for (var product in products.first) {
+      products.add(ProductItem.fromJson(product));
+    }
   }
 }

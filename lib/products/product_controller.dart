@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:prioritysoft_shoesly/repository/firestore_database.dart';
 
 class ProductController extends GetxController {
   RxBool hasInternet = false.obs;
@@ -12,8 +14,7 @@ class ProductController extends GetxController {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
-  RxInt tag = 0.obs;
-  RxList<String> history = <String>[''].obs;
+  FirestoreDatabaseServie databaseServie = FirestoreDatabaseServie();
 
   @override
   void onInit() {
@@ -23,6 +24,8 @@ class ProductController extends GetxController {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+   
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -43,8 +46,13 @@ class ProductController extends GetxController {
     _connectionStatus = result;
     hasInternet.value = !result.contains(ConnectivityResult.none);
 
+     if (hasInternet.value) databaseServie.getCollectionData();
+
     // ignore: avoid_print
     print('Connectivity changed: $_connectionStatus');
   }
 
+  getBrands() {
+    databaseServie.getBrands();
+  }
 }

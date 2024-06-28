@@ -22,4 +22,6 @@ class ShoeslyTextTheme {
       TextStyle(fontSize: 14.px, fontWeight: FontWeight.normal);
   static final bodyText100 =
       TextStyle(fontSize: 12.px, fontWeight: FontWeight.normal);
+  static final bodyText10 =
+      TextStyle(fontSize: 10.px, fontWeight: FontWeight.normal);
 }

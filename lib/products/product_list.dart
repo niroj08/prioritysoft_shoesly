@@ -1,10 +1,13 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:prioritysoft_shoesly/products/product_controller.dart';
+import 'package:prioritysoft_shoesly/repository/model/product.dart';
 import 'package:prioritysoft_shoesly/utils/constants.dart';
 import 'package:prioritysoft_shoesly/utils/styles.dart';
+import 'package:prioritysoft_shoesly/utils/widgets.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProductListPage extends StatelessWidget {
@@ -19,8 +22,8 @@ class ProductListPage extends StatelessWidget {
       body: Obx(
         () => controller.hasInternet.value
             ? Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 50.0, horizontal: 20.0),
+                padding:
+                    const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
                 child: controller.isCollecitonLoading.value
                     ? const Center(
                         child: SizedBox(
@@ -40,14 +43,16 @@ class ProductListPage extends StatelessWidget {
                                 Constants.discover,
                                 style: ShoeslyTextTheme.headline700,
                               ),
-                              const Icon(Icons.shopping_bag_outlined)
+                              const ImageIcon(
+                                  AssetImage('assets/icons/cart.png')),
                             ],
                           ),
                           ChipsChoice<int>.single(
-                            padding: const EdgeInsets.only(top: 20.0),
+                            padding:
+                                const EdgeInsets.only(top: 20.0, left: 0.0),
                             value: controller.tag.value,
                             onChanged: (val) {
-                             controller.onChangedBrandSelection(val);
+                              controller.onChangedBrandSelection(val);
                             },
                             choiceItems: C2Choice.listFrom<int, String>(
                               source: controller.brandValue,
@@ -59,14 +64,17 @@ class ProductListPage extends StatelessWidget {
                             choiceLabelBuilder: (item, i) {
                               return Text(
                                 item.label,
-                                style: ShoeslyTextTheme.headline600.copyWith(
+                                style: GoogleFonts.nunito(
                                     color: controller.tag.value == i
                                         ? Colors.black
-                                        : Colors.black26),
+                                        : Colors.black26,
+                                    fontSize: 20.px,
+                                    fontWeight: FontWeight.w600),
                               );
                             },
                             choiceStyle: C2ChipStyle.outlined(
                               borderStyle: BorderStyle.none,
+                              padding: EdgeInsets.zero,
                               selectedStyle: const C2ChipStyle(
                                 borderColor: Colors.transparent,
                               ),
@@ -79,77 +87,11 @@ class ProductListPage extends StatelessWidget {
                               // horizontal, this produces 2 rows.
                               itemCount: controller.products.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      height: 44.w,
-                                      width: 44.w,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[100],
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(24))),
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            child: SizedBox(
-                                              height: 20.0,
-                                              width: 20.0,
-                                              child: Image.asset(
-                                                controller.getBrandImage(index),
-                                              ),
-                                            ),
-                                          ),
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Image.asset(
-                                                controller.getProductImage(index)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10.0),
-                                    Text(
-                                      controller.products[index].title!,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: ShoeslyTextTheme.bodyText100,
-                                    ),
-                                    const SizedBox(height: 4.0),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.star,
-                                          size: 10.0,
-                                          color: Colors.yellow,
-                                        ),
-                                        const SizedBox(
-                                          width: 2.0,
-                                        ),
-                                        Text(
-                                          "${controller.products[index].rating!}",
-                                          style: ShoeslyTextTheme.headline300,
-                                        ),
-                                        const SizedBox(
-                                          width: 2.0,
-                                        ),
-                                        Text(
-                                          "(${controller.products[index].reviews!} reviews)",
-                                          style: ShoeslyTextTheme.bodyText100
-                                              .copyWith(color: Colors.grey),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 4.0),
-                                    Text(
-                                      "\$${controller.products[index].price!}",
-                                      style: ShoeslyTextTheme.headline300,
-                                    ),
-                                  ],
-                                );
+                                ProductItem item = controller.products[index];
+                                return productItemWidget(item);
                               },
+                              padding: const EdgeInsets.only(
+                                  bottom: 80.0, top: 20.0),
                               gridDelegate:
                                   const SliverGridDelegateWithMaxCrossAxisExtent(
                                       maxCrossAxisExtent: 200,
@@ -180,9 +122,10 @@ class ProductListPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.filter_list,
-                        color: Colors.white,
+                      Image.asset(
+                        'assets/icons/filter.png',
+                        height: 24.0,
+                        width: 24.0,
                       ),
                       const SizedBox(width: 8.0),
                       Text(

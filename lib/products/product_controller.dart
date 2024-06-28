@@ -91,12 +91,12 @@ class ProductController extends GetxController {
     }
   }
 
-  String getBrandImage(int index) {
-    return 'assets/brands/Name=${products[index].brand!}, Color=Grey.png';
+  String getBrandImage(String brand) {
+    return 'assets/brands/Name=$brand, Color=Grey.png';
   }
 
-  String getProductImage(int index) {
-    return 'assets/product_images/Brand=${products[index].brand!}.png';
+  String getProductImage(String brand) {
+    return 'assets/product_images/Brand=$brand.png';
   }
 
   void onChangedBrandSelection(int val) {
@@ -105,8 +105,8 @@ class ProductController extends GetxController {
     if (brandValue[val] == "All") {
       products.addAll(allProducts);
     } else {
-      products.addAll(allProducts
-          .where((element) => element.brand!.toLowerCase() == brandValue[val].toLowerCase()));
+      products.addAll(allProducts.where((element) =>
+          element.brand!.toLowerCase() == brandValue[val].toLowerCase()));
     }
   }
 }

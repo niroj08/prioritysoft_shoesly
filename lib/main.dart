@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prioritysoft_shoesly/firebase_options.dart';
 import 'package:prioritysoft_shoesly/products/product_list.dart';
@@ -18,10 +19,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
-        return MaterialApp(
+        return GetMaterialApp(
           title: 'Shoesly',
           theme: ThemeData(
             // This is the theme of your application.
@@ -41,17 +41,7 @@ class MyApp extends StatelessWidget {
             // tested with just a hot reload.
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
-            textTheme: GoogleFonts.nunitoTextTheme(textTheme).copyWith(
-              titleLarge: GoogleFonts.nunito(textStyle: textTheme.titleLarge),
-              titleMedium: GoogleFonts.nunito(textStyle: textTheme.titleMedium),
-              titleSmall: GoogleFonts.nunito(textStyle: textTheme.titleSmall),
-              displayLarge:
-                  GoogleFonts.nunito(textStyle: textTheme.displayLarge),
-              displayMedium:
-                  GoogleFonts.nunito(textStyle: textTheme.displayMedium),
-              displaySmall:
-                  GoogleFonts.nunito(textStyle: textTheme.displaySmall),
-            ),
+            textTheme: GoogleFonts.nunitoTextTheme(),
           ),
           home: ProductListPage(),
         );

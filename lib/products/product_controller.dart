@@ -10,11 +10,17 @@ import 'package:prioritysoft_shoesly/repository/firestore_database.dart';
 
 class ProductController extends GetxController {
   RxBool hasInternet = false.obs;
+  RxBool isCollecitonLoading = true.obs;
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   FirestoreDatabaseServie databaseServie = FirestoreDatabaseServie();
+
+  RxInt tag = 0.obs;
+
+  RxList<String> brandValue = ["All"].obs;
+  QueryDocumentSnapshot<Map<String, dynamic>>? brandsDocument;
 
   @override
   void onInit() {
@@ -24,35 +30,47 @@ class ProductController extends GetxController {
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
-   
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {
-    late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      result = await _connectivity.checkConnectivity();
+      await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
       developer.log('Couldn\'t check connectivity status', error: e);
       return;
     }
-
-    return _updateConnectionStatus(result);
   }
 
   Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
     _connectionStatus = result;
     hasInternet.value = !result.contains(ConnectivityResult.none);
 
-     if (hasInternet.value) databaseServie.getCollectionData();
+    if (hasInternet.value) {
+      databaseServie.getCollectionData().then((onValue) {
+        if (onValue) {
+          isCollecitonLoading.value = !onValue;
+          setBrandsNames();
+        }
+      });
+    }
 
     // ignore: avoid_print
     print('Connectivity changed: $_connectionStatus');
   }
 
   getBrands() {
-    databaseServie.getBrands();
+    brandsDocument = databaseServie.getBrands();
+  }
+
+  setBrandsNames() {
+    getBrands();
+   dynamic brands = brandsDocument!.data().values;
+
+    for (var brand in brands.first) {
+      brandValue.add(brand['name']);
+    }
+    return brandValue;
   }
 }

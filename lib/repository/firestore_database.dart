@@ -1,19 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreDatabaseServie {
-  
   FirebaseFirestore db = FirebaseFirestore.instance;
-  dynamic collection;
+  QuerySnapshot<Map<String, dynamic>>? collection;
 
-  getCollectionData() {
-    db.collection("shoesly").get().then((data) {
-      collection = data;
-    });
+  Future<bool> getCollectionData() async {
+    collection = await db.collection("shoesly").get();
+    return collection != null;
   }
 
-  getBrands() {
-    for (var doc in collection) {
-      print("${doc.id} => ${doc.data()}");
+  QueryDocumentSnapshot<Map<String, dynamic>>? getBrands() {
+    QueryDocumentSnapshot<Map<String, dynamic>>? brands;
+    if (collection != null) {
+      brands = collection!.docs.firstWhere((element) => element.id == "brand");
     }
+    return brands;
+  }
+
+  QueryDocumentSnapshot<Map<String, dynamic>>? getProducts() {
+    QueryDocumentSnapshot<Map<String, dynamic>>? products;
+    if (collection != null) {
+      products =
+          collection!.docs.firstWhere((element) => element.id == "product");
+    }
+    return products;
   }
 }
